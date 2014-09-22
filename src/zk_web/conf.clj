@@ -18,7 +18,9 @@
   (let [home-conf (str (get (System/getenv) "HOME") File/separator ".zk-web-conf.clj")
         pwd-conf "conf/zk-web-conf.clj"]
     (or (load-conf-file home-conf) (load-conf-file pwd-conf)
-        {
-         :server-port 8080
-         :users {"admin" "hello"}
-         })))
+        {:server-port (or (get (System/getenv) "ZKWEB_SERVER_PORT")
+                          8080)
+         :users {"admin"
+                 (or (get (System/getenv) "ZKWEB_ADMIN_PASSWORD")
+                     "hello")}
+         :default-node (get (System/getenv) "ZKWEB_DEFAULT_NODE")})))
